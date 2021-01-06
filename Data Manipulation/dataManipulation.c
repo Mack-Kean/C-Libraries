@@ -80,7 +80,7 @@ void getbits( char dest[], int bytes, void *src, int start, int end ){
 
     }
     
-    dest[numBits] = '\0'; //add null terminating character to the send of the string
+    dest[numBits] = '\0'; //add null terminating character to the end of the string
 
     //free memory
     free(charPtr);
