@@ -70,3 +70,26 @@
 * > `deleteItem( struct Performance *performance, struct Node **list_ptr, unsigned int index )` this function removes a node from the list pointed to by 'list_ptr' at index 'index'.
 
 * > `findItem( struct Performance *performance, struct Node **list_ptr, int (*compar)(const void *, const void *), void *target, unsigned int width )` this function uses any 'compar' function pointer to allow it to be used with any data type.  This function pointer points to a function that indicates whether the two pieces of data passed to it are equivalent. The main function uses `compar` to compare the data pointed to by 'target' with the 'width' bytes of data stored in 'node -> data' where 'node' is any node in the list pointed to by 'list_ptr'.  This function returns the appropriate index in the list where a match is found or -1 if no match is found.
+
+### Binary Tree
+**Library Description:** Used to implement a binary tree data structure. The library uses a structure of type Node to act as nodes in the tree and a structure of type Performance to keep track of operations performed on memory.  Each Node contains 2 pointers, one for data of lesser value (node -> lt) and one for data of greater than or equal value (node -> gte).  Both struct types are defined in `binaryTree.h`
+
+* > `newPerformance()` this function creates a struct of type Performance which is used to track the reads, writes, mallocs, and frees used in the other library functions
+
+* > `attachNode( struct Performance *performance, struct Node **node_ptr, void *src, unsigned int width )` this function attaches a node to one of the leaves of the tree. 'node_ptr' points to a pointer to a leaf node (at the bottom of the tree).  The data pointer in the new node is allocated 'width' bytes of memory which is populated with the data pointed to by 'src'.
+
+* > `comparNode( struct Performance *performance, struct Node **node_ptr, int (*compar)(const void *, const void *), void *target )` this function compares the data stored in the node pointed to by '*node_ptr' with the data pointed to by 'target' using the function pointed to by 'compar'.  `compar(target, (*node_ptr) -> data)` should return an integer that is greater than 0 when the data pointed to by 'target' is greater than the node data, an integer less than 0 when the data pointed to by 'target' is less than the node data, and 0 when both are equal.  The result of this compar function is what is returned.
+
+* > `next( struct Performance *performance, struct Node **node_ptr, int direction )` this function returns a pointer to the next desired node in the tree. 'direction specifies whether to return a pointer to a pointer to the 'lt' (less than) node or the 'gte' (greater than or equal) node.  A direction value of 0 or greater indicates that the gte branch will be followed, otherwise the lt branch will be followed.  'node_ptr' is a pointer to a pointer to the desired starting node in the tree.
+
+* > `readNode( struct Performance *performance, struct Node **node_ptr, void *dest, unsigned int width )` this function copies 'width' bytes of data from the node pointed to by '*node_ptr' to the memory location pointed to by 'dest'.
+
+* > `detachNode(struct Performance *performance, struct Node **node_ptr )` this function detaches the node pointed to by '*node_ptr' from the tree.  This function should only be called on leaves of the tree that have no children.  Otherwise major memory leaks may result from improper use.
+
+* > `isEmpty( struct Performance *performance, struct Node **node_ptr )` this function treats '*node_ptr' as the pointer to a root node of a tree/subtree and returns 1 if this tree/subtree is empty (no children) and 0 otherwise.
+
+* > `addItem( struct Performance *performance, struct Node **node_ptr, int (*compar)(const void *, const void *), void *src, unsigned int width )` this function uses the same 'compar' function as outlined in the `comparNode` description.  It treats '*node_ptr' as the pointer to a root node of a tree/subtree and adds a node containing 'width' bytes of the data pointed to by 'src' to the appropriate parent.  This parent node is determined using the `comparNode` function to determine which branches to take until a node with a null gte/lt pointer is found.
+
+* > `freeTree( struct Performance *performance, struct Node **node_ptr )`  this function treats '*node_ptr' as the pointer to a root node of a tree/subtree and recursively frees the entire tree.
+
+* > `searchItem( struct Performance *performance, struct Node **node_ptr, int (*compar)(const void *, const void *), void *target, unsigned int width )` this function uses the same 'compar' function as outlined in the `comparNode` description. It treats '*node_ptr' as the pointer to a root node of a tree/subtree and searches this tree to try and find a match between the 'width' bytes of data stored in each node and the 'width' bytes of data pointed to by 'target'.  If a match is found the function will return 1 and if no match is found the function will return 0.
