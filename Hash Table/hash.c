@@ -126,7 +126,7 @@ int getIdx( struct Performance *performance, struct HashTable *table, void *src 
 
     int index = table -> hash(src, table -> capacity);
     int originalIndex = index;
-    int result; //stores the result of the compar functions
+    int result = -1; //stores the result of the compar functions
     
     do {
 
@@ -223,7 +223,7 @@ int hashAccuracy( struct HashTable *table ) {
 
     }
 
-    return(differenceSum); //returns the summ of all the differences
+    return(differenceSum); //returns the sum of all the differences
 
 }
 

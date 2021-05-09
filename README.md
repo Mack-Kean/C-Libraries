@@ -95,4 +95,22 @@
 * > `searchItem( struct Performance *performance, struct Node **node_ptr, int (*compar)(const void *, const void *), void *target, unsigned int width )` this function uses the same 'compar' function as outlined in the `comparNode` description. It treats '*node_ptr' as the pointer to a root node of a tree/subtree and searches this tree to try and find a match between the 'width' bytes of data stored in each node and the 'width' bytes of data pointed to by 'target'.  If a match is found the function will return 1 and if no match is found the function will return 0.
 
 ### Hash Table
-**Library Description:**
+**Library Description:** Used to implement a hash table data structure. The library uses a structure of type HashTable to act as a hash table with an array, capacity, customized hash and comparison functions and a structure of type Performance to keep track of operations performed on memory.  Both struct types are defined in `hash.h`
+
+* > `newPerformance()` this function creates a struct of type Performance which is used to track the reads, writes, mallocs, and frees used in the other library functions
+
+* > `struct HashTable *createTable( struct Performance *performance, unsigned int capacity, int (*hash)(void *, int ), int (*compar)(const void *, const void*) )` this function creates and allocates memory for a struct of type HashTable and initializes the capacity, hash function, and comparison function for the struct based on function arguments.  The number of elements is initialized to 0.
+
+* > `void addElement( struct Performance *performance, struct HashTable *table, void *src )`  this function adds data (passed in through *src) to the hash table based on the value produced by the HashTable structure's hash function.  If collisions occur, the function performs linear probing and places the data in the nearest available spot to it's hash value.
+
+* > `int getIdx( struct Performance *performance, struct HashTable *table, void *src )` this function takes a piece of data passed into it through '*src' and searches for this data in the hash table.  If found, it's index is returned.  Else, -1 is returned.
+
+* > `void freeTable( struct Performance *performance, struct HashTable *table )` this function frees the struct passed in through argument '*table' and all of it's associated data.
+
+* > `void *getElement( struct Performance *performance, struct HashTable *table, void *src )` this function calls `getIdx` on the table passed in through '*table' and data passed in through '*src' and returns a pointer to the appropriate element in the hash table if it is found.  Otherwise NULL is returned.
+
+* > `void removeElement( struct Performance *performance, struct HashTable *table, void *target)` this function uses `getIdx` to search for the data passed in through '*target' in the table passed in through '*table'.  If the data is found it's pointer in the table is set to NULL and the number of elements is decremented.  Otherwise nothing happens if the data is not found.
+
+* > `int hashAccuracy( struct HashTable *table )` this function uses the hash function in '*table' to determine the difference in each piece of data's current index in the table and it's hash value.  The sum of these differences is returned.  A larger number being returned indicates a larger capacity table may be needed to avoid collisions.
+
+* > `void rehash( struct HashTable *table )` this function takes an existing table through the argument '*table' and swaps elements around so their indices are closer to their hash values.  This improves the hash accuracy and can be tested by using `hashAccuracy` on the table struct before a rehash and again afterwards.
