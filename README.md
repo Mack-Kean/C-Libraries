@@ -93,3 +93,6 @@
 * > `freeTree( struct Performance *performance, struct Node **node_ptr )`  this function treats '*node_ptr' as the pointer to a root node of a tree/subtree and recursively frees the entire tree.
 
 * > `searchItem( struct Performance *performance, struct Node **node_ptr, int (*compar)(const void *, const void *), void *target, unsigned int width )` this function uses the same 'compar' function as outlined in the `comparNode` description. It treats '*node_ptr' as the pointer to a root node of a tree/subtree and searches this tree to try and find a match between the 'width' bytes of data stored in each node and the 'width' bytes of data pointed to by 'target'.  If a match is found the function will return 1 and if no match is found the function will return 0.
+
+### Hash Table
+**Library Description:**
